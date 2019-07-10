@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpInterceptor, HttpRequest, HttpEvent, HttpHandler, HttpErrorResponse, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -17,16 +17,16 @@ export class ErrorInterceptor implements HttpInterceptor {
                         console.error(applicationError);
                         return throwError(applicationError);
                     }
-                    const serverError = error.error.errors;
-                    let modelStateErrors = '';
+                    const serverError = error.error;
+                    let modalStateErrors = '';
                     if (serverError && typeof serverError === 'object') {
                         for (const key in serverError) {
                             if (serverError[key]) {
-                                modelStateErrors += serverError[key] + '\n';
+                                modalStateErrors += serverError[key] + '\n';
                             }
                         }
                     }
-                    return throwError(modelStateErrors || serverError || 'Server Error');
+                    return throwError(modalStateErrors || serverError || 'Server Error');
                 }
             })
         );
@@ -37,4 +37,4 @@ export const ErrorInterceptorProvider = {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorInterceptor,
     multi: true
-}
+};
